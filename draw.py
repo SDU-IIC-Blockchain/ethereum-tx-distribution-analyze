@@ -52,23 +52,30 @@ if __name__ == '__main__':
             for i, data in enumerate(row):
                 datas[i].append(int(data))
 
+        my_bins = {
+            1: [150 * i for i in range(0, 10)],
+            2: [4000000 * i for i in range(0, 9)],
+        }
+
         # assume the first column is x and other columns are y
         for i in range(1, len(headers)):
             # plt.plot(data[0], data[i], label=headers[i])
             plt.figure(figsize=(12, 5)).clear()
             # https://qa.ostack.cn/qa/?qa=239242/
             counts, bins, patches = plt.hist(
-                datas[i], color='#888888', ec='black', lw=0.7,
+                datas[i],
+                bins=my_bins[i],
+                color='#888888', ec='black', lw=0.7,
                 weights=[100 / len(datas[i])] * len(datas[i]))
             ax = plt.gca()
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
             ax.yaxis.set_major_formatter(PercentFormatter(100))
-            plt.bar_label(patches, fmt='%.1f%%')
+            plt.bar_label(patches, fmt='%.3f%%')
             plt.xticks(bins)  # https://stackoverflow.com/a/66363887
             ax.xaxis.set_major_formatter(ScalarFormatter(useMathText=True))
             plt.xlabel(headers[i] + ' in a Block')
-            plt.ylabel('Percentage')
+            plt.ylabel('Proportion')
             plt.savefig(f'hist_{i}.{SAVE_FIG_FORMAT}', bbox_inches='tight')
 
         # for i in range(1, len(headers)):
