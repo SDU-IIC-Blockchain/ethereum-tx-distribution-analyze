@@ -2,17 +2,19 @@ import matplotlib
 import matplotlib.pyplot as plt
 import csv
 from matplotlib.ticker import PercentFormatter, ScalarFormatter
+import seaborn as sns
 
 SAVE_FIG_FORMAT = 'pgf'
 
 if __name__ == '__main__':
+    sns.set_style('whitegrid')
     # https://stackoverflow.com/a/39566040
 
     SMALL_SIZE = 18  # 8
     MEDIUM_SIZE = 24  # 10
     BIGGER_SIZE = 24  # 12
 
-    plt.rc('font', size=SMALL_SIZE)  # controls default text sizes
+    plt.rc('font', size=13)  # controls default text sizes
     plt.rc('axes', titlesize=SMALL_SIZE)  # fontsize of the axes title
     plt.rc('axes', labelsize=MEDIUM_SIZE)  # fontsize of the x and y labels
     plt.rc('xtick', labelsize=SMALL_SIZE)  # fontsize of the tick labels
@@ -43,6 +45,8 @@ if __name__ == '__main__':
             "font.family": 'Times New Roman',
         })
 
+    # cmap = sns.cubehelix_palette()
+
     with open('distribute.csv', 'r') as f:
         reader = csv.reader(f)
         headers = next(reader)
@@ -53,25 +57,33 @@ if __name__ == '__main__':
                 datas[i].append(int(data))
 
         my_bins = {
-            1: [150 * i for i in range(0, 10)],
+            1: [200 * i for i in range(0, 8)],
             2: [4000000 * i for i in range(0, 9)],
         }
 
+        my_colors = {
+            1: "#2b6f39",
+            2: "#d38fc5",
+        }
+
+        assert len(headers) - 1 == 2
         # assume the first column is x and other columns are y
         for i in range(1, len(headers)):
             # plt.plot(data[0], data[i], label=headers[i])
-            plt.figure(figsize=(12, 5)).clear()
+            plt.figure(figsize=(6, 5)).clear()
             # https://qa.ostack.cn/qa/?qa=239242/
             counts, bins, patches = plt.hist(
                 datas[i],
                 bins=my_bins[i],
-                color='#888888', ec='black', lw=0.7,
-                weights=[100 / len(datas[i])] * len(datas[i]))
+                color=my_colors[i],
+                # ec='black', lw=0.7,
+                weights=[100 / len(datas[i])] * len(datas[i]),
+            )
             ax = plt.gca()
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
             ax.yaxis.set_major_formatter(PercentFormatter(100))
-            plt.bar_label(patches, fmt='%.3f%%')
+            plt.bar_label(patches, fmt='%.2f%%')
             plt.xticks(bins)  # https://stackoverflow.com/a/66363887
             ax.xaxis.set_major_formatter(ScalarFormatter(useMathText=True))
             plt.xlabel(headers[i] + ' in a Block')
