@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
         my_colors = {
             1: "#2b6f39",
-            2: "#d38fc5",
+            2: "#1e76b3",
         }
 
         assert len(headers) - 1 == 2
