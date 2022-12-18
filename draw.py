@@ -70,7 +70,7 @@ if __name__ == '__main__':
         # assume the first column is x and other columns are y
         for i in range(1, len(headers)):
             # plt.plot(data[0], data[i], label=headers[i])
-            plt.figure(figsize=(6, 5)).clear()
+            plt.figure(figsize=(6, 3)).clear()
             # https://qa.ostack.cn/qa/?qa=239242/
             counts, bins, patches = plt.hist(
                 datas[i],
