@@ -66,6 +66,16 @@ if __name__ == '__main__':
             2: "#1e76b3",
         }
 
+        my_headers = {
+            1: "Transactions in a block",
+            2: "Gas used in a block",
+        }
+
+        my_ylims = {
+            1: (0.0, 70.0),
+            2: (0.0, 25.0),
+        }
+
         assert len(headers) - 1 == 2
         # assume the first column is x and other columns are y
         for i in range(1, len(headers)):
@@ -80,13 +90,14 @@ if __name__ == '__main__':
                 weights=[100 / len(datas[i])] * len(datas[i]),
             )
             ax = plt.gca()
-            ax.spines['top'].set_visible(False)
-            ax.spines['right'].set_visible(False)
+            # ax.spines['top'].set_visible(True)
+            # ax.spines['right'].set_visible(True)
             ax.yaxis.set_major_formatter(PercentFormatter(100))
             plt.bar_label(patches, fmt='%.2f%%')
             plt.xticks(bins)  # https://stackoverflow.com/a/66363887
             ax.xaxis.set_major_formatter(ScalarFormatter(useMathText=True))
-            plt.xlabel(headers[i] + ' in a Block')
+            plt.ylim(my_ylims[i][0], my_ylims[i][1])
+            plt.xlabel(my_headers[i])
             plt.ylabel('Proportion')
             plt.savefig(f'hist_{i}.{SAVE_FIG_FORMAT}', bbox_inches='tight')
 
